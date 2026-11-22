@@ -1,0 +1,53 @@
+.diagram {
+  width: 100%;
+  height: auto;
+}
+
+.link {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 6;
+  opacity: 0.8;
+  animation: flow 1.6s linear infinite;
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.box {
+  rect {
+    fill: var(--bg);
+    stroke: var(--line-strong);
+  }
+  text {
+    fill: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  &[data-tone="accent"] {
+    rect {
+      fill: rgba(61, 91, 255, 0.14);
+      stroke: var(--accent);
+    }
+    text {
+      fill: var(--text);
+    }
+  }
+  &[data-tone="signal"] {
+    rect {
+      stroke: var(--signal);
+    }
+    text {
+      fill: var(--signal);
+    }
+  }
+}
+
+html[data-motion="off"] .link {
+  animation: none;
+}

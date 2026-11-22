@@ -1,0 +1,55 @@
+@use "tokens" as *;
+
+.toggle {
+  @include label;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding-inline: 14px;
+  background: rgba(12, 13, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  color: var(--text-muted);
+  transition: color 0.2s $ease-out, border-color 0.2s $ease-out;
+  &:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+}
+
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+  i {
+    width: 2px;
+    height: 100%;
+    background: currentColor;
+    transform-origin: bottom;
+  }
+  &[data-on="true"] i {
+    animation: eq 1s ease-in-out infinite;
+    &:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+    &:nth-child(3) {
+      animation-delay: -0.6s;
+    }
+  }
+  &[data-on="false"] i {
+    transform: scaleY(0.3);
+  }
+}
+
+@keyframes eq {
+  50% {
+    transform: scaleY(0.35);
+  }
+}
