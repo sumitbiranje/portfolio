@@ -1,106 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { person } from "@/content/site";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMotion } from "@/lib/motion";
-import type { SignalScene } from "@/components/three/SignalScene";
 import styles from "./Hero.module.scss";
 
 const NODE_LABELS = ["Agents", "RAG", "MCP", "Graph", "Evals"];
 
-
-const INTERACTION_EVENTS = ["pointerdown", "pointermove", "wheel", "touchstart", "keydown", "scroll"] as const;
-
-// Keep WebGL off the critical path: start after the page has loaded and the main thread is idle.
-// On phones, wait for the first interaction (or a few seconds) so first paint stays fast.
-const whenReadyForWebGL = (callback: () => void, isMobile: boolean) => {
-  let cancelled = false;
-  let idleId: number | undefined;
-  let timer: ReturnType<typeof setTimeout> | undefined;
-
-  const run = () => {
-    if (cancelled) return;
-    cleanupListeners();
-    if (timer) clearTimeout(timer);
-    if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(() => !cancelled && callback(), { timeout: 1200 });
-    } else {
-      timer = setTimeout(() => !cancelled && callback(), 200);
-    }
-  };
-  const cleanupListeners = () => {
-    INTERACTION_EVENTS.forEach((name) => window.removeEventListener(name, run));
-    window.removeEventListener("load", onLoad);
-  };
-  const onLoad = () => {
-    if (!isMobile) return run();
-    INTERACTION_EVENTS.forEach((name) => window.addEventListener(name, run, { once: true, passive: true }));
-    timer = setTimeout(run, 4000);
-  };
-
-  if (document.readyState === "complete") onLoad();
-  else window.addEventListener("load", onLoad, { once: true });
-
-  return () => {
-    cancelled = true;
-    cleanupListeners();
-    if (timer) clearTimeout(timer);
-    if (idleId !== undefined) window.cancelIdleCallback(idleId);
-  };
-};
-
+// The particles themselves live in <ParticleField />, fixed behind the whole page.
 export const Hero = () => {
   const root = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sceneRef = useRef<SignalScene | null>(null);
-  const progressRef = useRef(0);
   const { enabled } = useMotion();
-
-  // WebGL scene: loaded after idle, only when motion is on, paused off-screen
-  useEffect(() => {
-    if (!enabled || !canvasRef.current) return;
-    const canvas = canvasRef.current;
-    let disposed = false;
-    let observer: IntersectionObserver | undefined;
-
-    const isMobile = window.matchMedia("(max-width: 899px)").matches;
-    const cancelIdle = whenReadyForWebGL(async () => {
-      const { SignalScene } = await import("@/components/three/SignalScene");
-      if (disposed) return;
-      const scene = new SignalScene({ canvas, portraitSrc: person.portrait ?? undefined, isMobile });
-      await scene.init();
-      if (disposed) {
-        scene.dispose();
-        return;
-      }
-      scene.setProgress(progressRef.current);
-      sceneRef.current = scene;
-      canvas.dataset.ready = "true";
-      observer = new IntersectionObserver(([entry]) => (entry.isIntersecting ? scene.start() : scene.stop()));
-      observer.observe(canvas);
-    }, isMobile);
-
-    const onPointer = (event: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
-      sceneRef.current?.setPointer(x, y);
-    };
-    window.addEventListener("pointermove", onPointer, { passive: true });
-
-    return () => {
-      disposed = true;
-      cancelIdle();
-      observer?.disconnect();
-      window.removeEventListener("pointermove", onPointer);
-      sceneRef.current?.dispose();
-      sceneRef.current = null;
-      delete canvas.dataset.ready;
-    };
-  }, [enabled]);
 
   // Scroll choreography: intro copy out, morph copy + node labels in
   useGSAP(
@@ -113,10 +26,6 @@ export const Hero = () => {
           start: "top top",
           end: "bottom bottom",
           scrub: true,
-          onUpdate: (self) => {
-            progressRef.current = self.progress;
-            sceneRef.current?.setProgress(Math.min(1, self.progress * 1.35));
-          },
         },
       });
       timeline
@@ -135,7 +44,6 @@ export const Hero = () => {
   return (
     <section ref={root} id="top" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.stage}>
-        <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
         <div className={styles.glow} aria-hidden="true" />
 
         <div className={styles.corners} aria-hidden="true">
