@@ -44,6 +44,14 @@ export const portraitShape = async (src: string, count: number, random: Random):
   context.drawImage(image, 0, 0, width, height);
   const { data } = context.getImageData(0, 0, width, height);
 
+  // A blurred copy of the alpha channel gives a soft edge mask, so the silhouette dissolves instead of
+  // ending in a hard outline
+  context.clearRect(0, 0, width, height);
+  context.filter = "blur(7px)";
+  context.drawImage(image, 0, 0, width, height);
+  context.filter = "none";
+  const soft = context.getImageData(0, 0, width, height).data;
+
   const positions = new Float32Array(count * 3);
   const brightness = new Float32Array(count);
   const scale = 3.5 / height;
@@ -54,14 +62,18 @@ export const portraitShape = async (src: string, count: number, random: Random):
     const x = random() * width;
     const y = random() * height;
     const index = (Math.floor(y) * width + Math.floor(x)) * 4;
-    if (data[index + 3] < 128) continue;
+    const edge = soft[index + 3] / 255; // 1 inside the subject, fading to 0 across a soft border
+    if (edge < 0.04) continue;
     const luminance = (data[index] * 0.299 + data[index + 1] * 0.587 + data[index + 2] * 0.114) / 255;
-    const bottomFade = Math.min(1, Math.max(0, (1 - y / height) / 0.2));
-    if (random() > (0.06 + Math.pow(luminance, 1.4) * 1.05) * bottomFade) continue;
-    positions[placed * 3] = (x - width / 2) * scale;
-    positions[placed * 3 + 1] = -(y - height / 2) * scale + 0.4;
-    positions[placed * 3 + 2] = (luminance - 0.5) * 0.25;
-    brightness[placed] = luminance;
+    const bottomFade = Math.min(1, Math.max(0, (1 - y / height) / 0.28));
+    const weight = (0.06 + Math.pow(luminance, 1.4) * 1.05) * Math.pow(edge, 1.6) * bottomFade;
+    if (random() > weight) continue;
+    // Near the edge, scatter particles outward a little so the border feathers like smoke
+    const scatter = (1 - edge) * 0.22;
+    positions[placed * 3] = (x - width / 2) * scale + (random() - 0.5) * scatter;
+    positions[placed * 3 + 1] = -(y - height / 2) * scale + 0.4 + (random() - 0.5) * scatter;
+    positions[placed * 3 + 2] = (luminance - 0.5) * 0.25 + (random() - 0.5) * scatter;
+    brightness[placed] = luminance * (0.35 + 0.65 * edge);
     placed += 1;
   }
   if (placed < count * 0.5) throw new Error("Portrait too dark to sample");

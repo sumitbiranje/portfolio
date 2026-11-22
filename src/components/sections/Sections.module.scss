@@ -40,9 +40,7 @@
 // Services
 .services {
   display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 14px;
   @include up($bp-sm) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -58,10 +56,11 @@
   gap: 14px;
   padding: clamp(24px, 3vw, 36px);
   min-height: 300px;
-  background: var(--bg);
-  transition: background-color 0.3s $ease-out;
+  @include glass;
+  border-radius: 18px;
+  transition: border-color 0.3s $ease-out, background-color 0.3s $ease-out;
   &:hover {
-    background: var(--bg-raised);
+    @include glass-hover;
   }
   &:hover .brackets {
     opacity: 1;
@@ -108,7 +107,9 @@
 }
 
 .serviceCta {
-  background: var(--bg-raised);
+  background:
+    radial-gradient(ellipse 80% 70% at 85% 15%, rgba(61, 91, 255, 0.28), transparent 70%),
+    rgba(12, 13, 20, 0.38);
   align-content: space-between;
   em {
     color: var(--accent-soft);
@@ -191,16 +192,15 @@
 
 .levels {
   display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 14px;
 }
 
 .level {
   display: grid;
   gap: 12px;
   padding: clamp(22px, 3vw, 32px);
-  background: var(--bg);
+  @include glass;
+  border-radius: 18px;
   h3 {
     font-size: clamp(1.25rem, 2vw, 1.5rem);
     font-weight: 500;
@@ -228,7 +228,9 @@
 
 .xp {
   height: 4px;
-  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
   margin-top: 6px;
   span {
     display: block;
@@ -253,11 +255,11 @@
   display: grid;
   gap: 12px;
   padding: 18px 18px 14px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
+  @include glass;
+  border-radius: 20px;
   background:
-    radial-gradient(ellipse 70% 55% at 60% 40%, rgba(61, 91, 255, 0.28), transparent 70%),
-    var(--bg-raised);
+    radial-gradient(ellipse 70% 55% at 60% 40%, rgba(61, 91, 255, 0.3), transparent 70%),
+    rgba(12, 13, 20, 0.38);
   overflow: hidden;
   img {
     width: 100%;
@@ -265,6 +267,8 @@
     max-height: 560px;
     object-fit: contain;
     object-position: bottom;
+    mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
   }
 }
 
@@ -287,9 +291,8 @@
 
 .offDuty {
   display: grid;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--bg-raised);
+  @include glass;
+  border-radius: 20px;
   overflow: hidden;
 }
 
@@ -330,9 +333,7 @@
 // Stack
 .stack {
   display: grid;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 14px;
   @include up($bp-sm) {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -346,7 +347,8 @@
   align-content: start;
   gap: 18px;
   padding: 28px;
-  background: var(--bg);
+  @include glass;
+  border-radius: 18px;
   h3 {
     display: flex;
     align-items: center;
@@ -360,14 +362,17 @@
   li {
     padding: 6px 12px;
     font-size: 0.88rem;
-    border: 1px solid var(--line-strong);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
     color: var(--text-muted);
   }
 }
 
 .exploring {
-  background: var(--bg-raised);
+  background:
+    radial-gradient(ellipse 70% 80% at 90% 10%, rgba(198, 255, 61, 0.08), transparent 70%),
+    rgba(12, 13, 20, 0.38);
   @include up($bp-lg) {
     grid-column: span 2;
   }
@@ -382,4 +387,22 @@
   border-radius: 50%;
   background: var(--signal);
   box-shadow: 0 0 10px var(--signal);
+}
+
+.listView {
+  margin-top: 18px;
+  summary {
+    @include label;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    cursor: pointer;
+    color: var(--text-muted);
+    &:hover {
+      color: var(--text);
+    }
+  }
+  .stack {
+    margin-top: 12px;
+  }
 }

@@ -23,7 +23,7 @@ export const SHAPE_ORDER = ["portrait", "graph", "orbit", "layers", "helix", "st
 const DESKTOP_LAYOUT: ShapeLayout[] = [
   { x: 0, y: 0, alpha: 1, scale: 1 },
   { x: 0, y: 0, alpha: 1, scale: 1 },
-  { x: 2, y: 0.35, alpha: 0.6, scale: 0.85 },
+  { x: 1.3, y: -0.85, alpha: 0.5, scale: 0.85 },
   { x: 0, y: 0, alpha: 0.45, scale: 1.05 },
   { x: 1.9, y: 0, alpha: 0.6, scale: 0.9 },
   { x: -0.3, y: 0, alpha: 0.45, scale: 0.95 },

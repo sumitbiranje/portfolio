@@ -11,10 +11,8 @@
   gap: 10px;
   min-height: 44px;
   padding-inline: 14px;
-  background: rgba(12, 13, 18, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--line-strong);
-  border-radius: 6px;
+  @include glass(14px, 0.5);
+  border-radius: 10px;
   color: var(--text-muted);
   transition: color 0.2s $ease-out, border-color 0.2s $ease-out;
   &:hover {

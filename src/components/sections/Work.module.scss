@@ -35,12 +35,11 @@
   display: grid;
   gap: 24px;
   padding: clamp(18px, 2.4vw, 28px);
-  background: var(--bg-raised);
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
+  @include glass(22px);
+  border-radius: 22px;
   transition: border-color 0.3s $ease-out;
   &:hover {
-    border-color: var(--accent);
+    @include glass-hover;
   }
   @media (min-width: 1024px) {
     flex: 0 0 min(72vw, 980px);
@@ -50,9 +49,9 @@
 }
 
 .frame {
-  border: 1px solid var(--line-strong);
-  border-radius: 10px;
-  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(3, 4, 8, 0.55);
   overflow: hidden;
   svg {
     padding: 18px 12px;

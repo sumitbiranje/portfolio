@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, Bot, Database, FlaskConical, Gamepad2, Network, ShieldCheck } from "lucide-react";
 import { exploring, levels, person, services, stack, stats, workflow, type Service } from "@/content/site";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { SkillAtlas } from "./SkillAtlas";
 import styles from "./Sections.module.scss";
 
 const ICONS: Record<Service["icon"], typeof Bot> = {
@@ -178,35 +179,40 @@ export const Stack = () => (
     <SectionHead
       index="07"
       label="Stack"
-      aside="Tools of the trade"
+      aside="Skill atlas"
       titleId="stack-title"
       title={
         <>
-          The <em>toolkit</em>.
+          The <em>toolkit</em>, mapped.
         </>
       }
+      intro="Every skill and case study, placed near the things it works with. Hover a dot to see its neighbours; click a ringed dot to open that case study."
     />
-    <div className={styles.stack}>
-      {stack.map((group) => (
-        <div key={group.group} className={styles.stackGroup} data-reveal>
-          <h3 className="label">{group.group}</h3>
+    <SkillAtlas />
+    <details className={styles.listView}>
+      <summary>View as a list</summary>
+      <div className={styles.stack}>
+        {stack.map((group) => (
+          <div key={group.group} className={styles.stackGroup}>
+            <h3 className="label">{group.group}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div className={`${styles.stackGroup} ${styles.exploring}`}>
+          <h3 className="label">
+            <span className={styles.live} aria-hidden="true" /> Currently exploring
+          </h3>
           <ul>
-            {group.items.map((item) => (
+            {exploring.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </div>
-      ))}
-      <div className={`${styles.stackGroup} ${styles.exploring}`} data-reveal>
-        <h3 className="label">
-          <span className={styles.live} aria-hidden="true" /> Currently exploring
-        </h3>
-        <ul>
-          {exploring.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
       </div>
-    </div>
+    </details>
   </section>
 );

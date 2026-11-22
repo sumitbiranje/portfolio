@@ -234,3 +234,34 @@ export const stack = [
 ] as const;
 
 export const exploring = ["LoRA / QLoRA fine-tuning", "vLLM & quantization", "Ollama, air-gapped inference", "Docker, CI/CD & MLOps"] as const;
+
+// Skill atlas (Embedding Atlas-style map). Positions are hand-arranged by topic in a -1..1 space:
+// related skills sit close together; projects sit between the clusters they draw on.
+export type AtlasFamily = "agents" | "retrieval" | "engineering" | "exploring";
+
+export const atlasFamilies: Record<AtlasFamily, { label: string; color: string }> = {
+  agents: { label: "Agents & LLMs", color: "#3987e5" },
+  retrieval: { label: "Retrieval & graphs", color: "#d95926" },
+  engineering: { label: "Engineering & QA", color: "#199e70" },
+  exploring: { label: "Currently exploring", color: "#8a8b94" },
+};
+
+export type AtlasCluster = { id: string; label: string; family: AtlasFamily; x: number; y: number; items: readonly string[] };
+
+export const atlasClusters: AtlasCluster[] = [
+  { id: "agentic", label: "Agentic systems", family: "agents", x: -0.58, y: 0.38, items: stack[0].items },
+  { id: "frameworks", label: "LLM frameworks", family: "agents", x: -0.16, y: 0.68, items: stack[1].items },
+  { id: "rag", label: "RAG & retrieval", family: "retrieval", x: 0.34, y: 0.4, items: stack[2].items },
+  { id: "graphs", label: "Graphs", family: "retrieval", x: 0.66, y: -0.02, items: stack[3].items },
+  { id: "backend", label: "Backend", family: "engineering", x: -0.52, y: -0.38, items: stack[4].items },
+  { id: "tools", label: "Tools & testing", family: "engineering", x: 0.02, y: -0.58, items: stack[5].items },
+  { id: "exploring", label: "Exploring", family: "exploring", x: 0.62, y: -0.62, items: exploring },
+];
+
+export const atlasProjects: Array<{ slug: string; label: string; family: AtlasFamily; x: number; y: number }> = [
+  { slug: "regression-test-selection", label: "Regression test selection", family: "retrieval", x: 0.38, y: -0.3 },
+  { slug: "code-knowledge-graph", label: "Code → knowledge graph", family: "retrieval", x: 0.8, y: 0.26 },
+  { slug: "requirement-traceability", label: "Traceability agent", family: "agents", x: 0.08, y: 0.12 },
+  { slug: "multi-agent-test-reviewer", label: "7-agent reviewer", family: "agents", x: -0.36, y: -0.02 },
+  { slug: "automation-feasibility", label: "Feasibility analyzer", family: "engineering", x: -0.1, y: -0.2 },
+];
