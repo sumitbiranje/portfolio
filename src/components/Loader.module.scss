@@ -1,0 +1,60 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  // Safety net: never trap the page if JS fails to run.
+  animation: loader-failsafe 0s 4s forwards;
+}
+
+@keyframes loader-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-sunken);
+  display: grid;
+  place-items: end start;
+  padding: var(--gutter);
+  pointer-events: auto;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 10vw, 7rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+html[data-motion="off"] .loader {
+  display: none;
+}
+
+// Phones get straight to content: the loader would only delay first paint
+@media (max-width: 899px) {
+  .loader {
+    display: none;
+  }
+}

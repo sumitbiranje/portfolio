@@ -1,0 +1,59 @@
+@use "tokens" as *;
+
+.head {
+  display: grid;
+  gap: clamp(40px, 6vw, 80px);
+  margin-bottom: clamp(48px, 7vw, 96px);
+}
+
+.rule {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  span:first-child {
+    color: var(--text);
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 10px;
+      background: var(--accent);
+    }
+  }
+}
+
+.aside {
+  display: none;
+  @include up($bp-md) {
+    display: inline;
+  }
+}
+
+.body {
+  display: grid;
+  gap: 24px;
+  @include up($bp-md) {
+    grid-template-columns: 1.6fr 1fr;
+    align-items: end;
+  }
+}
+
+.title {
+  @include display;
+  font-size: clamp(2.4rem, 6vw, 5.4rem);
+  em {
+    color: var(--accent-soft);
+  }
+}
+
+.intro {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  max-width: 420px;
+  @include up($bp-md) {
+    justify-self: end;
+  }
+}

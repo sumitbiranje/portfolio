@@ -1,0 +1,63 @@
+// Design tokens (see 03-theme.md). Import with `@use "@/styles/tokens" as *;`
+
+$bp-sm: 640px;
+$bp-md: 900px;
+$bp-lg: 1200px;
+
+@mixin up($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: ($bp - 1px)) {
+    @content;
+  }
+}
+
+@mixin label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+@mixin display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+@mixin focus-ring {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+// Frosted glass: translucent fill + backdrop blur, a light top edge and a soft drop shadow.
+// Falls back to a near-opaque fill where backdrop-filter isn't supported.
+@mixin glass($blur: 18px, $tint: 0.38) {
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.015) 45%),
+    rgba(12, 13, 20, $tint);
+  -webkit-backdrop-filter: blur($blur) saturate(160%);
+  backdrop-filter: blur($blur) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    background: rgba(14, 15, 22, 0.94);
+  }
+}
+
+@mixin glass-hover {
+  border-color: rgba(142, 160, 255, 0.35);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.025) 45%),
+    rgba(14, 16, 26, 0.42);
+}
