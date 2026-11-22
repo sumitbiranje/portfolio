@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { projects } from "@/content/site";
 import { Diagram } from "@/components/ui/Diagram";
+import { GithubIcon } from "@/components/ui/BrandIcons";
 import { RevealRoot } from "@/components/RevealRoot";
 import styles from "./page.module.scss";
 
@@ -53,6 +54,15 @@ export default async function CaseStudy({ params }: PageProps<"/work/[slug]">) {
               <li key={item}>{item}</li>
             ))}
           </ul>
+          <a href={project.repo} className={styles.repoButton} target="_blank" rel="noopener noreferrer" data-reveal>
+            <GithubIcon size={18} />
+            <span>
+              <strong>Full case study on GitHub</strong>
+              <small>Architecture, pipeline and design decisions</small>
+            </span>
+            <ArrowUpRight size={18} aria-hidden="true" />
+            <span className="sr-only">(opens in a new tab)</span>
+          </a>
         </header>
 
         <figure className={styles.figure} data-reveal>

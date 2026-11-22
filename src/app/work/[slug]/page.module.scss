@@ -134,3 +134,32 @@
     background: #5470ff;
   }
 }
+
+.repoButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  min-height: 56px;
+  padding: 12px 18px;
+  @include glass(16px);
+  border-radius: 14px;
+  transition: border-color 0.2s $ease-out, transform 0.2s $ease-out;
+  span:not(.sr-only) {
+    display: grid;
+    gap: 2px;
+  }
+  strong {
+    font-weight: 500;
+  }
+  small {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+  &:hover {
+    @include glass-hover;
+  }
+  &:active {
+    transform: scale(0.98);
+  }
+}

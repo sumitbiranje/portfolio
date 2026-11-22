@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { projects } from "@/content/site";
 import { Diagram } from "@/components/ui/Diagram";
+import { GithubIcon } from "@/components/ui/BrandIcons";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useMotion } from "@/lib/motion";
@@ -84,10 +85,16 @@ export const Work = () => {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <Link href={`/work/${project.slug}`} className={styles.link}>
-                  Read case study <ArrowUpRight size={16} aria-hidden="true" />
-                  <span className="sr-only">: {project.title}</span>
-                </Link>
+                <div className={styles.links}>
+                  <Link href={`/work/${project.slug}`} className={styles.link}>
+                    Read case study <ArrowUpRight size={16} aria-hidden="true" />
+                    <span className="sr-only">: {project.title}</span>
+                  </Link>
+                  <a href={project.repo} className={styles.repo} target="_blank" rel="noopener noreferrer">
+                    <GithubIcon size={15} /> Architecture on GitHub
+                    <span className="sr-only">: {project.title} (opens in a new tab)</span>
+                  </a>
+                </div>
               </div>
             </li>
           ))}

@@ -92,11 +92,13 @@ export type Project = {
   reuse: string;
   stack: string[];
   diagram: "selection" | "graph" | "trace" | "review" | "feasibility";
+  repo: string;
 };
 
 export const projects: Project[] = [
   {
     slug: "regression-test-selection",
+    repo: "https://github.com/sumitbiranje/ai-regression-test-selection",
     index: "01",
     title: "Smart Regression Test Selection",
     tagline: "When a build changes, which of thousands of tests actually need to run?",
@@ -116,6 +118,7 @@ export const projects: Project[] = [
   },
   {
     slug: "code-knowledge-graph",
+    repo: "https://github.com/sumitbiranje/code-knowledge-graph",
     index: "02",
     title: "Codebase → Knowledge Graph",
     tagline: "Making a multi-language codebase queryable as a graph.",
@@ -134,6 +137,7 @@ export const projects: Project[] = [
   },
   {
     slug: "requirement-traceability",
+    repo: "https://github.com/sumitbiranje/requirement-traceability-agent",
     index: "03",
     title: "Requirement-to-Code Traceability Agent",
     tagline: "An agent that reads the code and maps every requirement to where it lives.",
@@ -151,6 +155,7 @@ export const projects: Project[] = [
   },
   {
     slug: "multi-agent-test-reviewer",
+    repo: "https://github.com/sumitbiranje/multi-agent-test-case-reviewer",
     index: "04",
     title: "7-Agent Test Case Reviewer",
     tagline: "Replacing slow peer review with seven specialised AI reviewers.",
@@ -168,6 +173,7 @@ export const projects: Project[] = [
   },
   {
     slug: "automation-feasibility",
+    repo: "https://github.com/sumitbiranje/automation-feasibility-analyzer",
     index: "05",
     title: "Automation Feasibility Analyzer",
     tagline: "Which manual tests are worth automating? A verdict, with reasoning.",
