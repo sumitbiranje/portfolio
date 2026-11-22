@@ -62,7 +62,7 @@ export const services: Service[] = [
     id: "graphs",
     title: "Code intelligence & knowledge graphs",
     pitch: "Turn a sprawling, multi-language codebase into a queryable graph for impact analysis and search.",
-    proof: "Code → graph pipeline · Neo4j / FalkorDB",
+    proof: "Code → graph pipeline · Eclipse JDT · FalkorDB",
     icon: "network",
   },
   {
@@ -100,20 +100,21 @@ export const projects: Project[] = [
     slug: "regression-test-selection",
     repo: "https://github.com/sumitbiranje/ai-regression-test-selection",
     index: "01",
-    title: "Smart Regression Test Selection",
-    tagline: "When a build changes, which of thousands of tests actually need to run?",
+    title: "AI-Assisted Regression Platform",
+    tagline: "Two builds in, what changed and what to re-test out, with evidence for every claim.",
     challenge:
-      "Running the full regression suite on every software build is slow and expensive. Teams needed to know exactly which tests a code change could affect, without guessing.",
+      "Full regression of every build of a large Android-based product is too expensive, and picking tests by hand is risky. Teams needed to know what a change can actually reach, down to requirements and test cases, and why.",
     approach: [
-      "Diff two software builds and extract the code entities that changed.",
-      "Trace each change through a code knowledge graph (FalkorDB / Neo4j) using node traversal to find everything it touches.",
-      "Map the impacted entities to the tests that exercise them and return a minimal, justified test set.",
-      "Run it as a crash-resilient, checkpointed pipeline so long jobs resume instead of restarting.",
+      "Diff the two builds' manifests and git history to find changed repositories, files, lines, commits and tickets.",
+      "Build a code graph per build (Eclipse JDT for Java, tree-sitter for C/C++, a cross-language linker) and map changed lines to the methods that contain them.",
+      "Trace impact with guarded graph walks: dependents, interface dispatch and runtime callback links, layer by layer.",
+      "Hand each ticket group to an AI agent that maps the change to requirements through a specification graph; a script derives each verdict from a fixed decision record, and gates check every claim.",
+      "Fetch the linked test cases by fixed rules, flag coverage gaps with candidate scenarios, and detect changed screens for a separate UI-impact view.",
     ],
     outcome:
-      "Test selection becomes evidence-based: each selected test links back to the code change that triggered it.",
-    reuse: "Any team with a large codebase and a slow CI suite can use the same change-impact approach.",
-    stack: ["Python", "FalkorDB", "Neo4j", "tree-sitter", "DuckDB", "Streamlit"],
+      "Every build gets an evidence chain from commit to ticket, code chain, requirement and test case, with coverage gaps and UI impact, as Excel, JSON and JUnit for CI.",
+    reuse: "Any team with a large codebase, requirements and a slow regression suite: graph-based impact, AI judgement constrained by scripts and gates.",
+    stack: ["Python", "Eclipse JDT", "FalkorDB", "AI agents + MCP", "tree-sitter", "FastAPI", "React"],
     diagram: "selection",
   },
   {
@@ -121,36 +122,39 @@ export const projects: Project[] = [
     repo: "https://github.com/sumitbiranje/code-knowledge-graph",
     index: "02",
     title: "Codebase → Knowledge Graph",
-    tagline: "Making a multi-language codebase queryable as a graph.",
+    tagline: "One precise graph per build, from Java apps down to native and hardware-abstraction code.",
     challenge:
-      "A large automotive codebase spans Java, Kotlin, C, C++, XML and HAL layers. Understanding how a method is used across files and layers was manual, slow work.",
+      "A large automotive codebase spans Java, Kotlin, C/C++, interface definitions, manifests and HAL layers. Tracing a change needs calls resolved exactly: which overload, which inherited member, which implementation, across languages.",
     approach: [
-      "Parse every language with tree-sitter and custom import resolvers.",
-      "Link each method definition to its usages across files.",
-      "Ingest nodes, properties and relationships into a graph covering every layer: application, services, frameworks, ISP/BSP and HAL.",
+      "Java goes through Eclipse JDT in its own JVM per repository, with its dependencies' source roots, so types, overloads and inherited members resolve through real bindings.",
+      "C/C++ goes through tree-sitter: definitions merged with headers, calls typed where the receiver can be inferred.",
+      "Light parsers cover Kotlin, interface definitions and Android manifests; a linker joins Kotlin↔Java, JNI, interface stubs and HAL implementations.",
+      "Each build becomes one FalkorDB graph, cached per repository revision so new builds only re-parse what changed.",
     ],
     outcome:
-      "One graph that answers 'what uses this, and what does it break?' It powers the regression test selector.",
-    reuse: "The same pipeline fits code search, onboarding assistants and architecture audits.",
-    stack: ["Python", "tree-sitter", "Neo4j", "FalkorDB", "Multi-language parsing"],
+      "One graph that answers 'what uses this, and what does it break?' for the whole stack. It powers the regression platform's impact tracing.",
+    reuse: "The same pipeline fits code search, onboarding assistants, architecture audits and graph-RAG over code.",
+    stack: ["Eclipse JDT", "tree-sitter", "FalkorDB", "Python", "Cypher"],
     diagram: "graph",
   },
   {
     slug: "requirement-traceability",
     repo: "https://github.com/sumitbiranje/requirement-traceability-agent",
     index: "03",
-    title: "Requirement-to-Code Traceability Agent",
-    tagline: "An agent that reads the code and maps every requirement to where it lives.",
+    title: "Requirement ⇄ Code Traceability",
+    tagline: "Agents that map a change to the requirements it affects, and requirements to the code that implements them.",
     challenge:
       "Proving that each software requirement is implemented, and finding where, meant cross-reading specs and code by hand.",
     approach: [
-      "An agent explores a module's codebase and extracts its behaviour flow and sequence.",
+      "Code → requirement (inside the regression platform): an agent reads a change's root cause and fix, searches the requirements graph through MCP tools, and fills a fixed decision record per candidate; a script derives the verdict.",
+      "Validation gates check that every input was read, every pick is backed and every claim is quoted before the agent may finish.",
+      "Requirement → code: an agent explores a module's codebase and extracts its behaviour flow and sequence.",
       "It cross-references requirement (SRS) and design (SDS) specifications to understand how internal and external components interact.",
       "Each requirement is mapped one by one to the code elements that implement it.",
     ],
     outcome: "Traceability becomes a generated, reviewable artefact instead of a spreadsheet exercise.",
     reuse: "Fits any regulated or spec-heavy domain: automotive, medical, fintech, enterprise.",
-    stack: ["Python", "Multi-agent framework", "SRS / SDS analysis"],
+    stack: ["Python", "AI agents + MCP", "FalkorDB", "SRS / SDS analysis"],
     diagram: "trace",
   },
   {
@@ -236,7 +240,7 @@ export const stack = [
   { group: "RAG & retrieval", items: ["Embeddings", "Hybrid search", "Re-ranking", "Graph RAG", "Vectorless RAG", "Chunking"] },
   { group: "Graphs", items: ["Neo4j", "FalkorDB", "Cypher", "Ontology design", "Node traversal"] },
   { group: "Backend", items: ["Python (async)", "FastAPI", "Uvicorn", "REST", "asyncio", "Design patterns"] },
-  { group: "Tools", items: ["tree-sitter", "DuckDB", "Streamlit", "Git / GitLab", "Postman", "Claude Code", "Codex"] },
+  { group: "Tools", items: ["Eclipse JDT", "tree-sitter", "DuckDB", "Streamlit", "Git / GitLab", "Postman", "Claude Code", "Codex"] },
 ] as const;
 
 export const exploring = ["LoRA / QLoRA fine-tuning", "vLLM & quantization", "Ollama, air-gapped inference", "Docker, CI/CD & MLOps"] as const;
@@ -265,9 +269,9 @@ export const atlasClusters: AtlasCluster[] = [
 ];
 
 export const atlasProjects: Array<{ slug: string; label: string; family: AtlasFamily; x: number; y: number }> = [
-  { slug: "regression-test-selection", label: "Regression test selection", family: "retrieval", x: 0.38, y: -0.3 },
+  { slug: "regression-test-selection", label: "Regression platform", family: "retrieval", x: 0.38, y: -0.3 },
   { slug: "code-knowledge-graph", label: "Code → knowledge graph", family: "retrieval", x: 0.8, y: 0.26 },
-  { slug: "requirement-traceability", label: "Traceability agent", family: "agents", x: 0.08, y: 0.12 },
+  { slug: "requirement-traceability", label: "Requirement ⇄ code", family: "agents", x: 0.08, y: 0.12 },
   { slug: "multi-agent-test-reviewer", label: "7-agent reviewer", family: "agents", x: -0.36, y: -0.02 },
   { slug: "automation-feasibility", label: "Feasibility analyzer", family: "engineering", x: -0.1, y: -0.2 },
 ];
